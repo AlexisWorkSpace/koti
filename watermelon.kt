@@ -1,5 +1,9 @@
 fun main() {
-    val pesaje:Int = readLine()?.toIntOrNull()?.takeIf { it in 1..100 } ?: 0
+    var pesaje:Int
+    do
+        pesaje = readLine()?.toIntOrNull()?.takeIf { it in 1..100 } ?: 0
+    while (pesaje == 0)
+
     if(watermelon(pesaje)) println("YES") else println("NO")
 }
 
