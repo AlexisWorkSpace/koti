@@ -1,0 +1,20 @@
+import kotlin.math.abs
+fun main() {
+    val matrix = Array(5) { readLine()!!.split(" ").map { it.toInt() } }
+
+    var row = -1
+    var col = -1
+    for (i in 0 until 5) {
+        for (j in 0 until 5) {
+            if (matrix[i][j] == 1) {
+                row = i
+                col = j
+                break
+            }
+        }
+        if (row != -1) break
+    }
+
+    val moves = abs(row - 2) + abs(col - 2)
+    println(moves)
+}
