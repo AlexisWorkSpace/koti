@@ -22,3 +22,18 @@ fun <T : Comparable<T>> binarySearch(
     }
     return result
 }
+
+fun <T> dfs(
+    start: T,
+    graph: Map<T, List<T>>,
+    visited: MutableSet<T> = mutableSetOf(),
+    action: (T) -> Unit = {}
+) {
+    if (start in visited) return
+    visited.add(start)
+    action(start)
+    for (neighbor in graph[start].orEmpty()) {
+        dfs(neighbor, graph, visited, action)
+    }
+}
+
