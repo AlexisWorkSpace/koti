@@ -101,3 +101,39 @@ fun <T> dijkstra(
 
     return distance
 }
+
+fun <T> floydWarshall(
+    nodes: List<T>,
+    edges: List<Triple<T, T, Double>>
+): Map<T, Map<T, Double>> {
+    // Inicializar matriz de distancias
+    val dist = mutableMapOf<T, MutableMap<T, Double>>()
+    for (i in nodes) {
+        dist[i] = mutableMapOf()
+        for (j in nodes) {
+            dist[i]!![j] = if (i == j) 0.0 else Double.POSITIVE_INFINITY
+        }
+    }
+
+    // Cargar aristas
+    for ((from, to, weight) in edges) {
+        dist[from]?.set(to, weight)
+    }
+
+    // Algoritmo principal
+    for (k in nodes) {
+        for (i in nodes) {
+            for (j in nodes) {
+                val ik = dist[i]?.get(k) ?: continue
+                val kj = dist[k]?.get(j) ?: continue
+                val ij = dist[i]?.get(j) ?: continue
+                if (ik + kj < ij) {
+                    dist[i]?.set(j, ik + kj)
+                }
+            }
+        }
+    }
+
+    return dist
+}
+
