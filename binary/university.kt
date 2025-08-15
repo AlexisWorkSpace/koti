@@ -1,11 +1,37 @@
 fun main() {
-    // ingreso de las n habitaciones y las m cartas
     val (n, m) = readln().split(" ").map { it.toInt() }
-    // se ingresa una sola linea por array - por lo que se puede separar por espacios
-    val a:List<Int> = readln().split(" ").map { it.toInt() }.take(n)
-    val b:List<Int> = readln().split(" ").map { it.toInt() }.take(m)
-    // se crea secuencia a[1] + a[2] + ... + a[n]
-    val p:List<Int> = a.runningFold(0) { acc, value -> acc + value}
+    val a:List<Long> = readln().split(" ").map { it.toLong() }.take(n)
+    val b:List<Long> = readln().split(" ").map { it.toLong() }.take(m)
 
+    // p[i] = total acumulado de habitaciones hasta el dormitorio i
+    val p:List<Long> = a.runningFold(0L) { acc, value -> acc + value }
 
+    for (x in b) {
+        val idx:Int = binarySearch(p, condition = { it >= x })
+        val localRoom:Long = x - p[idx - 1]
+        println("$idx $localRoom")
+    }
+}
+
+fun <T : Comparable<T>> binarySearch(
+    list: List<T>,
+    condition: (T) -> Boolean,
+    exactMatch: Boolean = false
+): Int {
+    var l = 0
+    var r = list.size - 1
+    var result = -1
+
+    while (l <= r) {
+        val m = (l + r) / 2
+        val value = list[m]
+        if (condition(value)) {
+            result = m
+            if (exactMatch) return m
+            r = m - 1
+        } else {
+            l = m + 1
+        }
+    }
+    return result
 }
