@@ -1,5 +1,6 @@
 package recorridoGrafos
 
+import java.util.PriorityQueue
 import java.util.LinkedList
 import java.util.Queue
 
@@ -65,6 +66,36 @@ fun <T> bellmanFord(
         val newDist = distance[from]?.plus(weight) ?: continue
         if (newDist < distance[to] ?: Double.POSITIVE_INFINITY) {
             return null // Ciclo negativo detectado
+        }
+    }
+
+    return distance
+}
+
+data class Edge<T>(val to: T, val weight: Double)
+
+fun <T> dijkstra(
+    graph: Map<T, List<Edge<T>>>,
+    source: T
+): Map<T, Double> {
+    val distance = mutableMapOf<T, Double>().withDefault { Double.POSITIVE_INFINITY }
+    val visited = mutableSetOf<T>()
+    val queue = PriorityQueue(compareBy<Pair<T, Double>> { it.second })
+
+    distance[source] = 0.0
+    queue.add(source to 0.0)
+
+    while (queue.isNotEmpty()) {
+        val (current, dist) = queue.poll()
+        if (current in visited) continue
+        visited.add(current)
+
+        for ((neighbor, weight) in graph[current].orEmpty()) {
+            val newDist = dist + weight
+            if (newDist < distance.getValue(neighbor)) {
+                distance[neighbor] = newDist
+                queue.add(neighbor to newDist)
+            }
         }
     }
 
